@@ -57,7 +57,7 @@ namespace EnhancedTwitchChat.UI
             songRequestsEnabled.SetValue += (requests) => { Config.Instance.SongRequestBot = requests; };
             songRequestsEnabled.GetValue += () => { return Config.Instance.SongRequestBot; };
 
-            var skipConfirmationEnabled = menu.AddBool("Skip Confirmation", "Shows confirmation dialog for skipping song requests");
+            var skipConfirmationEnabled = menu.AddBool("Skip Confirmation", "Show confirmation dialog when skipping song requests.");
             skipConfirmationEnabled.SetValue += (skipConfirmation) => { Config.Instance.SkipConfirmation = skipConfirmation; };
             skipConfirmationEnabled.GetValue += () => { return Config.Instance.SkipConfirmation; };
 

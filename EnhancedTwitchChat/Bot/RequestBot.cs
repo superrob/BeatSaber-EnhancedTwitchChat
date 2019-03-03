@@ -197,9 +197,34 @@ namespace EnhancedTwitchChat.Bot
                     yield break;
                 }
                 yield return null;
-                
 
-                JSONObject song = !result["songs"].IsArray ? result["song"].AsObject : result["songs"].AsArray[0].AsObject;
+                JSONObject song;
+                // If only one object, use that, else find the best candidate
+                if (!result["songs"].IsArray)
+                {
+                    song = result["song"].AsObject;
+                }
+                else
+                {
+                    int bestCandidate = 0;
+                    float bestRating = -1f;
+                    for (int i = 0; i < result["total"].AsInt; i++)
+                    {
+                        JSONObject possibleCandidate = result["songs"].AsArray[i].AsObject;
+                        if (_songBlacklist.Contains(possibleCandidate["id"]))
+                        {
+                            // Skip any blacklisted songs
+                            continue;
+                        }
+                        if (possibleCandidate["rating"].AsFloat > bestRating)
+                        {
+                            bestCandidate = i;
+                            bestRating = possibleCandidate['rating'].AsFloat;
+                        }
+                    }
+                    song = result["songs"].AsArray[bestCandidate].AsObject;
+                }                
+
                 if (FinalRequestQueue.Any(req => req.song["version"] == song["version"]))
                 {
                     QueueChatMessage($"Request {song["songName"].Value} by {song["authorName"].Value} already exists in queue!");
@@ -215,7 +240,7 @@ namespace EnhancedTwitchChat.Bot
                         yield break;
                     }
 
-                    if (song["rating"].AsFloat < 0.5f)
+                    if (song["rating"].AsFloat < 50.0f)
                     {
                         QueueChatMessage($"{song["songName"].Value} by {song["authorName"].Value} is rated lower than 50% and thus cannot be requested.");
                         _checkingQueue = false;
