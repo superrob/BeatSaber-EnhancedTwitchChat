@@ -215,6 +215,13 @@ namespace EnhancedTwitchChat.Bot
                         yield break;
                     }
 
+                    if (song["rating"].AsFloat < 0.5f)
+                    {
+                        QueueChatMessage($"{song["songName"].Value} by {song["authorName"].Value} is rated lower than 50% and thus cannot be requested.");
+                        _checkingQueue = false;
+                        yield break;
+                    }
+
                     _requestTracker[requestor.id].numRequests++;
                     FinalRequestQueue.Add(new SongRequest(song, requestor));
                     UpdateRequestButton();
