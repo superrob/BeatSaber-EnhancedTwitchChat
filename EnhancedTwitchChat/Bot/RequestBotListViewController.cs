@@ -24,11 +24,12 @@ namespace EnhancedTwitchChat.Bot
         private CustomViewController _confirmationViewController;
         private LevelListTableCell _songListTableCellInstance;
         private SongPreviewPlayer _songPreviewPlayer;
-        private Button _playButton, _skipButton, _blacklistButton, _okButton, _cancelButton;
+        private Button _playButton, _skipButton, _blacklistButton, _okButton, _cancelButton, _randomButton;
         private TextMeshProUGUI _warningTitle, _warningMessage;
         private int _selectedRow = 0;
         private int _lastSelection = -1;
         private Action _onConfirm;
+        private System.Random random = new System.Random();
         protected override void DidActivate(bool firstActivation, ActivationType type)
         {
             if (firstActivation)
@@ -51,7 +52,7 @@ namespace EnhancedTwitchChat.Bot
                 // Blacklist button
                 _blacklistButton = Instantiate(Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == "QuitButton")), container, false);
                 _blacklistButton.ToggleWordWrapping(false);
-                (_blacklistButton.transform as RectTransform).anchoredPosition = new Vector2(90f, 10f);
+                (_blacklistButton.transform as RectTransform).anchoredPosition = new Vector2(90f, 20f);
                 _blacklistButton.SetButtonText("Blacklist");
                 //_blacklistButton.GetComponentInChildren<Image>().color = Color.red;
                 _blacklistButton.onClick.RemoveAllListeners();
@@ -68,12 +69,13 @@ namespace EnhancedTwitchChat.Bot
                 // Skip button
                 _skipButton = Instantiate(Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == "QuitButton")), container, false);
                 _skipButton.ToggleWordWrapping(false);
-                (_skipButton.transform as RectTransform).anchoredPosition = new Vector2(90f, 0f);
+                (_skipButton.transform as RectTransform).anchoredPosition = new Vector2(90f, 10f);
                 _skipButton.SetButtonText("Skip");
                 //_skipButton.GetComponentInChildren<Image>().color = Color.yellow;
                 _skipButton.onClick.RemoveAllListeners();
                 _skipButton.onClick.AddListener(delegate ()
                 {
+                    /*
                     _onConfirm = () =>
                     {
                         _lastSelection = -1;
@@ -83,13 +85,32 @@ namespace EnhancedTwitchChat.Bot
                     _warningTitle.text = "Skip Song Warning";
                     _warningMessage.text = $"Skipping {song["songName"].Value} by {song["authorName"].Value}\r\nDo you want to continue?";
                     _confirmationDialog.Present();
+                    */
+                    // No reason to show confirm for skips-
+                    _lastSelection = -1;
+                    RequestBot.Skip(_selectedRow);
                 });
                 BeatSaberUI.AddHintText(_skipButton.transform as RectTransform, "Remove the selected request from the queue.");
+
+                // Random button
+                _randomButton = Instantiate(Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == "QuitButton")), container, false);
+                _randomButton.ToggleWordWrapping(false);
+                (_randomButton.transform as RectTransform).anchoredPosition = new Vector2(90f, 0f);
+                _randomButton.SetButtonText("Random");
+                //_randomButton.GetComponentInChildren<Image>().color = Color.green;
+                _randomButton.onClick.RemoveAllListeners();
+                _randomButton.onClick.AddListener(delegate ()
+                {
+                    _selectedRow = random.Next(0, _customListTableView.dataSource.NumberOfRows() - 1);
+                    _customListTableView.SelectRow(_selectedRow, true);
+                    _customListTableView.ScrollToRow(_selectedRow, true);
+                });
+                BeatSaberUI.AddHintText(_randomButton.transform as RectTransform, "Randomly selects one entry from the request list.");
 
                 // Play button
                 _playButton = Instantiate(Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == "QuitButton")), container, false);
                 _playButton.ToggleWordWrapping(false);
-                (_playButton.transform as RectTransform).anchoredPosition = new Vector2(90f, -10f);
+                (_playButton.transform as RectTransform).anchoredPosition = new Vector2(90f, -20f);
                 _playButton.SetButtonText("Play");
                 _playButton.GetComponentInChildren<Image>().color = Color.green;
                 _playButton.onClick.RemoveAllListeners();
@@ -185,6 +206,7 @@ namespace EnhancedTwitchChat.Bot
             _backButton.interactable = interactive;
             _playButton.interactable = interactive;
             _skipButton.interactable = interactive;
+            _randomButton.interactable = interactive;
             _blacklistButton.interactable = interactive;
         }
 
