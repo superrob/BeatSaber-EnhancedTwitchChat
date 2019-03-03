@@ -75,20 +75,22 @@ namespace EnhancedTwitchChat.Bot
                 _skipButton.onClick.RemoveAllListeners();
                 _skipButton.onClick.AddListener(delegate ()
                 {
-                    /*
-                    _onConfirm = () =>
+                    if (Config.Instance.SkipConfirmation)
+                    {
+                        _onConfirm = () =>
+                        {
+                            _lastSelection = -1;
+                            RequestBot.Skip(_selectedRow);
+                        };
+                        var song = RequestBot.FinalRequestQueue[_selectedRow].song;
+                        _warningTitle.text = "Skip Song Warning";
+                        _warningMessage.text = $"Skipping {song["songName"].Value} by {song["authorName"].Value}\r\nDo you want to continue?";
+                        _confirmationDialog.Present();
+                    } else
                     {
                         _lastSelection = -1;
                         RequestBot.Skip(_selectedRow);
-                    };
-                    var song = RequestBot.FinalRequestQueue[_selectedRow].song;
-                    _warningTitle.text = "Skip Song Warning";
-                    _warningMessage.text = $"Skipping {song["songName"].Value} by {song["authorName"].Value}\r\nDo you want to continue?";
-                    _confirmationDialog.Present();
-                    */
-                    // No reason to show confirm for skips-
-                    _lastSelection = -1;
-                    RequestBot.Skip(_selectedRow);
+                    }                    
                 });
                 BeatSaberUI.AddHintText(_skipButton.transform as RectTransform, "Remove the selected request from the queue.");
 

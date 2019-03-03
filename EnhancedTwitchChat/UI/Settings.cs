@@ -57,6 +57,10 @@ namespace EnhancedTwitchChat.UI
             songRequestsEnabled.SetValue += (requests) => { Config.Instance.SongRequestBot = requests; };
             songRequestsEnabled.GetValue += () => { return Config.Instance.SongRequestBot; };
 
+            var skipConfirmationEnabled = menu.AddBool("Skip Confirmation", "Shows confirmation dialog for skipping song requests");
+            skipConfirmationEnabled.SetValue += (skipConfirmation) => { Config.Instance.SkipConfirmation = skipConfirmation; };
+            skipConfirmationEnabled.GetValue += () => { return Config.Instance.SkipConfirmation; };
+
             var animatedEmotes = menu.AddBool("Animated Emotes", "Enables animated BetterTwitchTV/FrankerFaceZ/Cheermotes in the chat. When disabled, these emotes will still appear but will not be animated.");
             animatedEmotes.SetValue += (animted) => { Config.Instance.AnimatedEmotes = animted; };
             animatedEmotes.GetValue += () => { return Config.Instance.AnimatedEmotes; };

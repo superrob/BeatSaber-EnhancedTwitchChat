@@ -54,6 +54,7 @@ namespace EnhancedTwitchChat
         public bool AnimatedEmotes = true;
         public bool DrawShadows = false;
         public bool SongRequestBot = false;
+        public bool SkipConfirmation = true;
 
         public string RequestCommandAliases = "request,bsr,add";
         public int RequestLimit = 5;
