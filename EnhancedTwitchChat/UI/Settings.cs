@@ -61,6 +61,11 @@ namespace EnhancedTwitchChat.UI
             skipConfirmationEnabled.SetValue += (skipConfirmation) => { Config.Instance.SkipConfirmation = skipConfirmation; };
             skipConfirmationEnabled.GetValue += () => { return Config.Instance.SkipConfirmation; };
 
+            var minimumRating = menu.AddList("Minimum Song Rating", incrementValues(0, 0.1f, 101), "Skips song requests for songs rated under this value.");
+            minimumRating.SetValue += (rating) => { Config.Instance.MinimumRating = rating; };
+            minimumRating.GetValue += () => { return Config.Instance.MinimumRating; };
+            minimumRating.FormatValue += (value) => { return value.ToString(); };
+
             var animatedEmotes = menu.AddBool("Animated Emotes", "Enables animated BetterTwitchTV/FrankerFaceZ/Cheermotes in the chat. When disabled, these emotes will still appear but will not be animated.");
             animatedEmotes.SetValue += (animted) => { Config.Instance.AnimatedEmotes = animted; };
             animatedEmotes.GetValue += () => { return Config.Instance.AnimatedEmotes; };

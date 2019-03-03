@@ -240,7 +240,7 @@ namespace EnhancedTwitchChat.Bot
                         yield break;
                     }
 
-                    if (song["rating"].AsFloat < 50.0f)
+                    if (song["rating"].AsFloat < Config.Instance.MinimumRating)
                     {
                         QueueChatMessage($"{song["songName"].Value} by {song["authorName"].Value} is rated lower than 50% and thus cannot be requested.");
                         _checkingQueue = false;

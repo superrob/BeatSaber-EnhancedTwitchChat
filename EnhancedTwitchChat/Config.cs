@@ -29,6 +29,7 @@ namespace EnhancedTwitchChat
         public float ChatWidth = 160;
         public float MessageSpacing = 2.0f;
         public int MaxChatLines = 30;
+        public float MinimumRating = 50.0f;
 
         public float PositionX = 2.0244143f;
         public float PositionY = 0.373768f;
